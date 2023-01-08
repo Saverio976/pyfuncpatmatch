@@ -1,3 +1,3 @@
-from pyfuncpatmatch.pyfuncpatmatch import PatEqMatch, PatListExtract, patfunc
+from pyfuncpatmatch.pyfuncpatmatch import PatEqMatch, PatListExtract, patfunc, PatMatchAll
 
-__all__ = ["patfunc", "PatListExtract", "PatEqMatch"]
+__all__ = ["patfunc", "PatListExtract", "PatEqMatch", "PatMatchAll"]
