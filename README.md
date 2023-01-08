@@ -23,6 +23,7 @@ def fib_rec(n: int):
 - less basic
 ```python
 from pyfuncpatmatch import patfunc
+
 def for_admin(xp, is_admin=True):
     print("Admin has 2000xp")
 
