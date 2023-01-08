@@ -1,18 +1,22 @@
+import inspect
 from functools import update_wrapper
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-import inspect
+
 
 class PatMatchAll:
     def __init__(self) -> None:
         pass
 
+
 class PatEqMatch:
     def __init__(self, value: Any) -> None:
         self.value = value
 
+
 class PatEqMatchList(PatEqMatch):
     def __init__(self, value: List[Any]) -> None:
         self.value = value
+
 
 class PatListExtract:
     def __init__(
@@ -36,7 +40,13 @@ KArgsPatternMatch = Dict[str, PatternMatch]
 
 
 class _PatDecoratorClass:
-    def __init__(self, func_instead: Optional[Callable], true_func: Callable, l_args: LArgsPatternMatch = [], k_args: KArgsPatternMatch = {}) -> None:
+    def __init__(
+        self,
+        func_instead: Optional[Callable],
+        true_func: Callable,
+        l_args: LArgsPatternMatch = [],
+        k_args: KArgsPatternMatch = {},
+    ) -> None:
         update_wrapper(self, true_func)
         self.true_func = true_func
         self.func_instead = func_instead
@@ -62,7 +72,11 @@ class _PatDecoratorClass:
             response = self.true_func(*args, **kwds)
         return response
 
-    def _args_to_kwargs(self, args: Union[LArgsPatternMatch, list], kwargs: Union[KArgsPatternMatch, dict]) -> Union[KArgsPatternMatch, dict]:
+    def _args_to_kwargs(
+        self,
+        args: Union[LArgsPatternMatch, list],
+        kwargs: Union[KArgsPatternMatch, dict],
+    ) -> Union[KArgsPatternMatch, dict]:
         ret = {}
         if not isinstance(args, PatMatchAll):
             for value, key in zip(args, self.parameters.keys()):
@@ -71,7 +85,9 @@ class _PatDecoratorClass:
             ret[key] = value
         return ret
 
-    def _parse_kwargs(self, k_args: KArgsPatternMatch) -> Tuple[Dict[str, Union[PatEqMatch, PatMatchAll]], Dict[str, PatListExtract]]:
+    def _parse_kwargs(
+        self, k_args: KArgsPatternMatch
+    ) -> Tuple[Dict[str, Union[PatEqMatch, PatMatchAll]], Dict[str, PatListExtract]]:
         exact_patterns: Dict[str, Union[PatEqMatch, PatMatchAll]] = {}
         extract_pattern: Dict[str, PatListExtract] = {}
         for key_arg, item_arg in k_args.items():
@@ -94,13 +110,17 @@ class _PatDecoratorClass:
                 return False
         return True
 
-    def _exe_extract_paterns(self, call_args: list, call_kwargs: dict) -> Union[dict, str]:
+    def _exe_extract_paterns(
+        self, call_args: list, call_kwargs: dict
+    ) -> Union[dict, str]:
         if len(self.extract_patterns) == 0:
             return "ok"
         call_k_wargs = self._args_to_kwargs(call_args, call_kwargs)
         for key, extract in self.extract_patterns.items():
             value = call_k_wargs.get(key)
-            if value is None or isinstance(value, (PatListExtract, PatEqMatch, PatMatchAll)):
+            if value is None or isinstance(
+                value, (PatListExtract, PatEqMatch, PatMatchAll)
+            ):
                 return "not ok"
             fst = value[0]
             rest = value[1:]
@@ -119,12 +139,14 @@ class _PatDecoratorClass:
 def patfunc(
     l_args: LArgsPatternMatch = PatMatchAll(),
     k_args: Union[KArgsPatternMatch, PatMatchAll] = PatMatchAll(),
-    func_instead: Optional[Callable] = None
+    func_instead: Optional[Callable] = None,
 ):
     if isinstance(l_args, list):
         l_args = tuple(l_args)
     if isinstance(k_args, PatMatchAll):
         k_args = {}
+
     def inner_decorator(true_func: Callable):
         return _PatDecoratorClass(func_instead, true_func, l_args, k_args)
+
     return inner_decorator
