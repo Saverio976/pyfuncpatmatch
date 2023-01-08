@@ -1,0 +1,27 @@
+name: Publish Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  pypi-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up PDM
+        uses: pdm-project/setup-pdm@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install Dependencies
+        run: pdm install --prod --no-editable --no-self --no-lock
+
+      - name: Publish
+        run: pdm publish -c "$PDM_PUBLISH_COMMENT"
+        env:
+          PDM_PUBLISH_USERNAME: __token__
+          PDM_PUBLISH_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+          PDM_PUBLISH_COMMENT: ${{ github.event.release.body }}
