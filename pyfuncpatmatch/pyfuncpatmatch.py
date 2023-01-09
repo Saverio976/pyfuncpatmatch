@@ -125,13 +125,14 @@ class _PatDecoratorClass:
     ) -> Tuple[dict, list, str]:
         if len(self.extract_patterns) == 0:
             return ({}, [], "ok-no-extract")
+        copy_extract = self.extract_patterns.copy()
         call_k_wargs = self._match_args_to_kwargs_match(call_args, call_kwargs)
         new_k_wargs = OrderedDict()
         for key, value in call_k_wargs.items():
-            if key not in self.extract_patterns.keys():
+            if key not in copy_extract.keys():
                 new_k_wargs[key] = value
                 continue
-            extract = self.extract_patterns.pop(key)
+            extract = copy_extract.pop(key)
             value = value["value"]
             if isinstance(
                 value, (PatListExtract, PatEqMatch, PatMatchAll, bool)
@@ -153,6 +154,8 @@ class _PatDecoratorClass:
                 new_k_wargs[f"{key}__________rest"] = {"value": rest, "is_kwargs": False}
             else:
                 new_k_wargs[extract.var_name_rest] = {"value": rest, "is_kwargs": True}
+        if len(copy_extract.keys()) != 0:
+            return ({}, [], "ko")
         av, kv = self._kwargs_match_to_func_param(new_k_wargs)
         return (kv, av, "ok")
 
