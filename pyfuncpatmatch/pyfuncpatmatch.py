@@ -211,8 +211,11 @@ class _PatDecoratorClass:
                 value, (PatListExtract, PatEqMatch, PatMatchAll, bool)
             ):
                 return ({}, [], "ko")
-            fst = value[0]
-            rest = value[1:]
+            try:
+                fst = value[0]
+                rest = value[1:]
+            except Exception:
+                return ({}, [], "ko")
             if not isinstance(extract.fst_eq_match, PatMatchAll):
                 if fst != extract.fst_eq_match.value:
                     return ({}, [], "ko")
