@@ -158,7 +158,9 @@ class _PatDecoratorClass:
             ret[key] = {"value": value, "is_kwargs": True}
         return ret
 
-    def _kwargs_match_to_func_param(self, k_wargs: OrderedDict[str, Dict[str, Union[Any, bool]]]) -> Tuple[list, dict]:
+    def _kwargs_match_to_func_param(
+        self, k_wargs: OrderedDict[str, Dict[str, Union[Any, bool]]]
+    ) -> Tuple[list, dict]:
         args = []
         kwargs = {}
         for key, value in k_wargs.items():
@@ -207,9 +209,7 @@ class _PatDecoratorClass:
                 continue
             extract = copy_extract.pop(key)
             value = value["value"]
-            if isinstance(
-                value, (PatListExtract, PatEqMatch, PatMatchAll, bool)
-            ):
+            if isinstance(value, (PatListExtract, PatEqMatch, PatMatchAll, bool)):
                 return ({}, [], "ko")
             try:
                 fst = value[0]
@@ -227,7 +227,10 @@ class _PatDecoratorClass:
             else:
                 new_k_wargs[extract.var_name_fst] = {"value": fst, "is_kwargs": True}
             if extract.var_name_rest is None:
-                new_k_wargs[f"{key}__________rest"] = {"value": rest, "is_kwargs": False}
+                new_k_wargs[f"{key}__________rest"] = {
+                    "value": rest,
+                    "is_kwargs": False,
+                }
             else:
                 new_k_wargs[extract.var_name_rest] = {"value": rest, "is_kwargs": True}
         if len(copy_extract.keys()) != 0:
