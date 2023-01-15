@@ -1,10 +1,15 @@
 import inspect
 from collections import OrderedDict
 from functools import update_wrapper
-from typing import Callable, Optional, Any, Union, List, Dict, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
-from pyfuncpatmatch.types import LArgsPatternMatch, KArgsPatternMatch, PatternMatch
-from pyfuncpatmatch.pat_match_types import PatGtEqMatch, PatGtMatch, PatLtEqMatch, PatLtMatch, PatMatchAll, PatEqMatch, PatListExtract
+from pyfuncpatmatch.pat_match_types import (PatEqMatch, PatGtEqMatch,
+                                            PatGtMatch, PatListExtract,
+                                            PatLtEqMatch, PatLtMatch,
+                                            PatMatchAll)
+from pyfuncpatmatch.types import (KArgsPatternMatch, LArgsPatternMatch,
+                                  PatternMatch)
+
 
 class PatDecoratorClass:
     def __init__(
@@ -65,13 +70,46 @@ class PatDecoratorClass:
 
     def _parse_kwargs_match(
         self, k_args: Dict[str, Dict[str, Union[Any, bool]]]
-    ) -> Tuple[Dict[str, Union[PatEqMatch, PatMatchAll, PatGtMatch, PatGtEqMatch, PatLtMatch, PatLtEqMatch]], Dict[str, PatListExtract]]:
-        exact_patterns: Dict[str, Union[PatEqMatch, PatMatchAll, PatGtMatch, PatGtEqMatch, PatLtMatch, PatLtEqMatch]] = {}
+    ) -> Tuple[
+        Dict[
+            str,
+            Union[
+                PatEqMatch,
+                PatMatchAll,
+                PatGtMatch,
+                PatGtEqMatch,
+                PatLtMatch,
+                PatLtEqMatch,
+            ],
+        ],
+        Dict[str, PatListExtract],
+    ]:
+        exact_patterns: Dict[
+            str,
+            Union[
+                PatEqMatch,
+                PatMatchAll,
+                PatGtMatch,
+                PatGtEqMatch,
+                PatLtMatch,
+                PatLtEqMatch,
+            ],
+        ] = {}
         extract_pattern: Dict[str, PatListExtract] = {}
         for key_arg, item_arg in k_args.items():
             if isinstance(item_arg["value"], PatListExtract):
                 extract_pattern[key_arg] = item_arg["value"]
-            elif isinstance(item_arg["value"], (PatEqMatch, PatMatchAll, PatGtMatch, PatGtEqMatch, PatLtMatch, PatLtEqMatch)):
+            elif isinstance(
+                item_arg["value"],
+                (
+                    PatEqMatch,
+                    PatMatchAll,
+                    PatGtMatch,
+                    PatGtEqMatch,
+                    PatLtMatch,
+                    PatLtEqMatch,
+                ),
+            ):
                 exact_patterns[key_arg] = item_arg["value"]
             else:
                 exact_patterns[key_arg] = PatEqMatch(value=item_arg["value"])

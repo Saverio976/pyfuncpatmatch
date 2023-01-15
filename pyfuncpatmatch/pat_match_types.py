@@ -1,5 +1,6 @@
 from typing import Any, Optional, Union
 
+
 class PatMatchAll:
     """PatMatchAll.
     If you want to match all
@@ -45,6 +46,7 @@ class PatGtMatch:
     def __init__(self, value: Any) -> None:
         self.value = value
 
+
 class PatLtMatch:
     """PatLtMatch.
 
@@ -53,6 +55,7 @@ class PatLtMatch:
 
     def __init__(self, value: Any) -> None:
         self.value = value
+
 
 class PatGtEqMatch:
     """PatGtMatch.
@@ -63,6 +66,7 @@ class PatGtEqMatch:
     def __init__(self, value: Any) -> None:
         self.value = value
 
+
 class PatLtEqMatch:
     """PatLtMatch.
 
@@ -71,6 +75,7 @@ class PatLtEqMatch:
 
     def __init__(self, value: Any) -> None:
         self.value = value
+
 
 class PatListExtract:
     """PatListExtract.
@@ -101,8 +106,24 @@ class PatListExtract:
         self,
         var_name_fst: Optional[str] = None,
         var_name_rest: Optional[str] = None,
-        fst_match: Union[Any, PatEqMatch, PatMatchAll, PatGtMatch, PatGtEqMatch, PatLtMatch, PatLtEqMatch] = PatMatchAll(),
-        rest_match: Union[Any, PatEqMatch, PatMatchAll, PatGtMatch, PatGtEqMatch, PatLtMatch, PatLtEqMatch] = PatMatchAll(),
+        fst_match: Union[
+            Any,
+            PatEqMatch,
+            PatMatchAll,
+            PatGtMatch,
+            PatGtEqMatch,
+            PatLtMatch,
+            PatLtEqMatch,
+        ] = PatMatchAll(),
+        rest_match: Union[
+            Any,
+            PatEqMatch,
+            PatMatchAll,
+            PatGtMatch,
+            PatGtEqMatch,
+            PatLtMatch,
+            PatLtEqMatch,
+        ] = PatMatchAll(),
     ) -> None:
         """__init__.
 
@@ -124,11 +145,31 @@ class PatListExtract:
         """
         self.var_name_fst = var_name_fst
         self.var_name_rest = var_name_rest
-        if isinstance(fst_match, (PatEqMatch, PatMatchAll, PatGtMatch, PatGtEqMatch, PatLtMatch, PatLtEqMatch)):
+        if isinstance(
+            fst_match,
+            (
+                PatEqMatch,
+                PatMatchAll,
+                PatGtMatch,
+                PatGtEqMatch,
+                PatLtMatch,
+                PatLtEqMatch,
+            ),
+        ):
             self.fst_match = fst_match
         else:
             self.fst_match = PatEqMatch(fst_match)
-        if isinstance(rest_match, (PatEqMatch, PatMatchAll, PatGtMatch, PatGtEqMatch, PatLtMatch, PatLtEqMatch)):
+        if isinstance(
+            rest_match,
+            (
+                PatEqMatch,
+                PatMatchAll,
+                PatGtMatch,
+                PatGtEqMatch,
+                PatLtMatch,
+                PatLtEqMatch,
+            ),
+        ):
             self.rest_match = rest_match
         else:
             self.rest_match = PatEqMatch(rest_match)
