@@ -1,9 +1,9 @@
 from typing import Any, Dict, List, Tuple, Union
 
-from pyfuncpatmatch.pat_match_types import PatEqMatch, PatListExtract, PatMatchAll
+from pyfuncpatmatch.pat_match_types import PatEqMatch, PatListExtract, PatMatchAll, PatGtMatch, PatGtEqMatch, PatLtMatch, PatLtEqMatch
 
 
-PatternMatch = Union[Any, PatListExtract, PatEqMatch, PatMatchAll]
+PatternMatch = Union[Any, PatListExtract, PatEqMatch, PatMatchAll, PatGtMatch, PatGtEqMatch, PatLtMatch, PatLtEqMatch]
 LArgsPatternMatch = Union[List[PatternMatch], Tuple[PatternMatch], PatMatchAll]
 LArgsPatternEqMatch = Union[List[PatEqMatch], Tuple[PatEqMatch]]
 LArgsPatternExtractMatch = Union[List[PatListExtract], Tuple[PatListExtract]]

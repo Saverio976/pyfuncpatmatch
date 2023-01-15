@@ -19,7 +19,7 @@ if fib_rec(6) != 8:
 
 @patfunc([""], {}, lambda _: "Empty Name")
 @patfunc([PatListExtract()], {}, lambda x,_: x)
-def print_initial(name: str):
+def print_initial(_: str):
     ...
 
 print("print_initial 1")
