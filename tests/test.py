@@ -33,14 +33,8 @@ if print_initial("SupperName") != "S":
     exit(1)
 
 
-def for_admin(xp, is_admin=True):
-    return "Admin has 2000xp"
-
-def for_newbie(xp, is_admin=False):
-    return "You are new"
-
-@patfunc([], {"is_admin": True}, for_admin)
-@patfunc([1], {"is_admin": False}, for_newbie)
+@patfunc([], {"is_admin": True}, lambda *_: "Admin has 2000xp")
+@patfunc([1], {"is_admin": False}, lambda *_: "You are new")
 def print_for(xp, is_admin=False):
     return f"Someone has xp: {xp}"
 
