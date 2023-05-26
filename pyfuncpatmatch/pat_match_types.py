@@ -130,9 +130,11 @@ class PatListExtract:
         Parameters
         ----------
         var_name_fst : Optional[str]
-            name to give (kwargs) to the first elem, if None, it is passed as args, in place of the true arg order
+            name to give (kwargs) to the first elem, if None,
+             it is passed as args, in place of the true arg order
         var_name_rest : Optional[str]
-            name to give (kwargs) to the rest of the elem, if None, it is passed as args, after var_name_fst
+            name to give (kwargs) to the rest of the elem, if None,
+             it is passed as args, after var_name_fst
         fst_eq_match : Union[PatEqMatch, PatMatchAll, Any]
             pattern match for the first elem
         rest_eq_match : Union[PatEqMatchList, PatMatchAll, Any]

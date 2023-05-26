@@ -1,14 +1,27 @@
 import inspect
 from collections import OrderedDict
 from functools import update_wrapper
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    Union
+)
 
-from pyfuncpatmatch.pat_match_types import (PatEqMatch, PatGtEqMatch,
-                                            PatGtMatch, PatListExtract,
-                                            PatLtEqMatch, PatLtMatch,
-                                            PatMatchAll)
-from pyfuncpatmatch.types import (KArgsPatternMatch, LArgsPatternMatch,
-                                  PatternMatch)
+from pyfuncpatmatch.pat_match_types import (
+    PatEqMatch, PatGtEqMatch,
+    PatGtMatch, PatListExtract,
+    PatLtEqMatch, PatLtMatch,
+    PatMatchAll
+)
+from pyfuncpatmatch.types import (
+    KArgsPatternMatch,
+    LArgsPatternMatch,
+    PatternMatch
+)
 
 
 class PatDecoratorClass:
