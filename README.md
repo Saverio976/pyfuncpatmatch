@@ -10,86 +10,87 @@ pip install pyfuncpatmatch
 
 ## Usage
 
-- basic recursive fibonacci
-```python
-from pyfuncpatmatch import patfunc
+### Exemples
 
-@patfunc([0], {}, lambda _: 0)
-@patfunc([1], {}, lambda _: 1)
+_For a full list of exemples and tests done, see:_ [main](./pyfuncpatmatch/__main__.py)
+
+#### eq
+
+```python
+from pyfuncpatmatch import pm, _eq
+
+@pm(lambda _: 0, _eq(0))
+@pm(lambda _: 1, _eq(1))
 def fib_rec(n: int):
     return fib_rec(n - 1) + fib_rec(n - 2)
 ```
 
-- less basic
+#### gte, lte
+
 ```python
-from pyfuncpatmatch import patfunc
+from pyfuncpatmatch import pm, _gte, _lte
 
-def for_admin(xp, is_admin=True):
-    print("Admin has 2000xp")
-
-def for_newbie(xp, is_admin=False):
-    print("You are new")
-
-@patfunc([], {"is_admin": True}, for_admin)
-@patfunc([1], {"is_admin": False}, for_newbie)
-def print_for(xp, is_admin=False):
-    print("Someone has xp:", xp)
+@pm(lambda x: f"You are not a teen ({x})", _gte(18))
+@pm(lambda x: f"You are not a teen ({x})", _lte(11))
+def is_teen(x):
+    return f"You are a teen ({x})"
 ```
 
-in action:
+#### and, lambda
+
 ```python
->>> print_for(1, True)
-Admin has 2000xp
->>> print_for(1, False)
-You are new
->>> print_for(20, False)
-Someone has xp: 20
+from pyfuncpatmatch import pm, _and, _lambda
+
+@pm(
+    lambda _: "FizzBuzz",
+    _and(_lambda(lambda x: x % 3 == 0), _lambda(lambda x: x % 5 == 0)),
+)
+@pm(lambda _: "Fizz", _lambda(lambda x: x % 3 == 0))
+@pm(lambda _: "Buzz", _lambda(lambda x: x % 5 == 0))
+def fizzbuzz(x):
+    return f"{x}"
 ```
 
-- with list extract
-```python
-from pyfuncpatmatch import patfunc, PatListExtract
+#### empty, all, extract
 
-@patfunc([PatListExtract()], {}, lambda x,y: print(x))
-def print_initial(name: str):
-    ...
-```
-in action
 ```python
->>> print_initial("SuperName")
-S
->>> print_initial("a")
-a
-```
-**but with empty value** (you could have not this error, but, still)
-```python
->>> print_initial("")
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File ".../pyfuncpatmatch/pyfuncpatmatch.py", line 64, in __call__
-    kv, av, status = self._exe_extract_paterns(list(args), kwds)
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File ".../pyfuncpatmatch/pyfuncpatmatch.py", line 140, in _exe_extract_
-paterns
-    fst = value[0]
-          ~~~~~^^^
-IndexError: string index out of range
-```
-**so you need to put a pattern matching with an empty value** (like this:)
-```python
-from pyfuncpatmatch import patfunc, PatListExtract
+from pyfuncpatmatch import pm, pm_raise, _empty, __, _extract
 
-@patfunc([""], {}, lambda x: print("Empty Name"))
-@patfunc([PatListExtract()], {}, lambda x,y: print(x))
-def print_initial(name: str):
-    ...
+# pm_raise is a function that raise the exception being passed
+# -> lambda can't raise the expression directly
+@pm(lambda _: pm_raise(ValueError("empty iterable")), _empty())
+@pm(lambda splited: splited[0], _extract(__(), __()))
+def head(x):
+    raise SyntaxError(f"{x} is not iterable")
+
+@pm(lambda splited: splited[1], _extract(__(), __()))
+def tail(x):
+    raise ValueError(f"{x} is not iterable")
 ```
-and it will be like this:
+
+#### Keyword Matching
+
+Arguments and Keyword Arguments are passed to the callback the same way they
+would have be passed to the initial function.
+
+But when the callback is a lambda, it automatically transform keywords arguments
+as arguments (because passing keyword arguments to lambda raise an exception).
+
+This ensure that you can keep calling the initial function with arguments and
+keywords arguments.
+
 ```python
->>> print_initial("")
-Empty Name
->>> print_initial("a")
-a
->>> print_initial("SupperName")
-S
+from pyfuncpatmatch import pm, __, _or, _eq
+
+@pm(lambda x, z: (x,z), x=__(), z=_or(_eq(2), _eq(5)))
+@pm(lambda x, z: (x,z), __(), z=_eq(10))
+def select(x, y, z):
+    return (x, y, z)
+
+# >>> select(1, 2, z=3)
+# (1, 2, 3)
+# >>> select(0, 1, 2)
+# (0, 2)
+# >>> select(1, 3, 10)
+# (1, 10)
 ```

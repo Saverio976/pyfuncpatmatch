@@ -20,21 +20,4 @@ jobs:
         run: pdm install --no-editable --no-lock
 
       - name: Tests normal
-        run: pdm run python tests/test.py
-
-  functionnal-advanced:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up PDM
-        uses: pdm-project/setup-pdm@v2
-        with:
-          python-version: "3.x"
-
-      - name: Install Dependencies
-        run: pdm install --no-editable --no-lock
-
-      - name: Tests advanced
-        run: pdm run python tests/advanced.py
+        run: pdm run test

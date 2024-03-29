@@ -32,3 +32,17 @@ write_template = '__version__ = "{}"'
 includes = [
     "pyfuncpatmatch/",
 ]
+[tool.pdm.scripts]
+test = "python -m pyfuncpatmatch"
+black = "black pyfuncpatmatch"
+vulture = "vulture pyfuncpatmatch"
+flake8 = "flake8 pyfuncpatmatch"
+[tool.black]
+line-length = 79
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "black>=24.3.0",
+    "vulture>=2.11",
+    "flake8>=7.0.0",
+]
